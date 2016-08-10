@@ -1,0 +1,25 @@
+{
+  "name": "amenti",
+  "version": "1.0.0",
+  "description": "amenti javascript framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-nobody/amenti.git"
+  },
+  "keywords": [
+    "lightweight",
+    "javascript",
+    "view",
+    "framework"
+  ],
+  "author": "The Nobody",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/the-nobody/amenti/issues"
+  },
+  "homepage": "http://amenti.io"
+}
