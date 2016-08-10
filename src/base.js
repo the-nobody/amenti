@@ -13,4 +13,4 @@ class Base {
   }
 }
 
-module.exports = Builder;
+module.exports = Base;
