@@ -6,7 +6,7 @@ class State {
     this._current = "lock";
   }
   
-  set(state) {
+  setter(state) {
     const _current = this._states[this._current] || false;
     const _state = this._states[state] || false;
 
