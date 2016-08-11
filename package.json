@@ -3,11 +3,6 @@
   "version": "1.0.1",
   "description": "amenti javascript framework",
   "main": "index.js",
-  "scripts": {
-    "pack": "webpack ./index.js ./dist/amenti.js",
-    "uglify": "uglifyjs ./dist/amenti.js > ./dist/amenti.min.js",
-    "build": "npm run pack && npm run uglify"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/the-nobody/amenti.git"
