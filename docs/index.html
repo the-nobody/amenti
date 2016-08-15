@@ -1,0 +1,35 @@
+<!doctype htl>
+
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="style/base.css">
+</head>
+<body>
+  <main></main>
+  
+  <script src="../dist/amenti.min.js"></script>
+  
+  <script>
+    var main = new amenti.Room({
+      selector: "main",
+      template: `
+        <h1 class="logo">amenti</h1>
+        <p>Amenti is a lightweight Javascript framework for structuring and providing state to otherwise stateless things.</p>
+        <p>The framework is based on the principle of Guide, Hall, Room.  With this structure you can build pretty much infinite apps.</p>
+
+        <h3><a href="room/index.html">Room</a></h3>
+        <p>A room is where all the html/dom/rendering magic happens.  Load a template from your favorite templating engine, or work directly with javascript template strings and build some really cool functions to wrap in.  The freedom is yours.</p>
+        
+        <h3><a href="hall/index.html">Hall</a></h3>
+        <p>A hall is a container of rooms with states.  After a while many rooms get hard to manage, and placing them in a container will make it seamless to interact with more spaces.</p>
+
+        <h3><a href="guide/index.html">Guide</a></h3>
+        <p>A guide is a container of halls with states.  This guide can open all it's halls and send messages back and forth. It can also set the state of any hall, or room that exists withing it.</p>
+      `
+    });
+    main.open();
+  </script>
+</body>
+</html>

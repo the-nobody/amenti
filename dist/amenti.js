@@ -303,129 +303,145 @@ function isUndefined(arg) {
 }
 
 },{}],2:[function(require,module,exports){
-// used for the browserify package
-window.amenti = require("./index.js");
-
-},{"./index.js":3}],3:[function(require,module,exports){
-module.exports = {
-  Hall: require("./src/hall.js"),
-  Guide: require("./src/guide.js"),
-  Room: require("./src/room.js"),
-  sel: require("./src/sel.js")
+// used to create a global window amenti for the browserify build
+const Amenti = {
+  Hall: require("./hall.js"),
+  Guide: require("./guide.js"),
+  Room: require("./room.js"),
+  sel: require("./sel.js")
 };
 
-},{"./src/guide.js":5,"./src/hall.js":6,"./src/room.js":7,"./src/sel.js":8}],4:[function(require,module,exports){
-const State = require("./state.js");
+window.amenti = Amenti;
+
+},{"./guide.js":4,"./hall.js":5,"./room.js":6,"./sel.js":7}],3:[function(require,module,exports){
+const {EventEmitter} = require("events");
 // utility for setting this options in a class
 // Builder
 class Base {
-  constructor(opts) {
-    opts = opts || {};
-    opts.states = opts.states || {};
-    
+  constructor(opts={}) {
+    opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
+    opts.states = opts.states || ["lock", "open", "close"];
     for (var opt in opts) {
       this[opt] = opts[opt];
     }
-    this.state = new State(this.states);
+    this._emitter = new EventEmitter({});
+    this.state = this.states[0];
   }
-}
-
-module.exports = Base;
-
-},{"./state.js":9}],5:[function(require,module,exports){
-// Emitter: using node event emitter
-const Emitter = require("events").EventEmitter;
-const Base = require("./base.js");
-
-// GUIDE Class
-class Guide extends Base {
-  constructor(opts) {
-    super(opts);
-    this.halls = {};
-    this.rooms = {};
-    this._emitter = new Emitter({});
-  }
-  
-  speak(msg, res=false) {
-    this._emitter.emit(msg, res);
+  speak(msg, resource=false) {
+    this._emitter.emit(msg, resource);
     return Promise.resolve();
   }
   listen(msg, callback) {
-    this._emitter.on(msg, callback);
+    this._emitter.on(`${msg}`, callback);
     return Promise.resolve();
   }
   once(msg, callback) {
     this._emitter.once(msg, callback);
     return Promise.resolve();
   }
-  remove(msg, callback) {
+  ignore(msg, callback) {
     this._emitter.removeListener(msg, callback);
     return Promise.resolve();
   }
   
-  // process a route/hash change in the url
-  route(trigger) {
+  setState(state) {
+    const _current = this.state;
+    const _state = this.states.includes(state);
     const self = this;
+    
+    if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
+    if (state === _current) { throw new Error(`Currently in state: ${state}`); }
+
+    if (_current) {
+      self.speak(`${_current}:leaving`).then(() => {
+        self.speak(`${state}:entering`).then(() => {
+          self.state = state;
+          self.speak(`${self._current}:entered`);
+        })
+      });
+    }
+    return Promise.resolve();
+  }
+  addState(state) {
+    this.states.push(state);
+  }
+}
+
+module.exports = Base;
+
+},{"events":1}],4:[function(require,module,exports){
+// guide only handles guiding/routing traffic.
+const Base = require("./base.js");
+
+// GUIDE Class
+class Guide extends Base {
+  constructor(opts={}) {
+    opts.halls = opts.halls || {};
+    super(opts);
+  }
+  // process a route/hash change in the url
+  route(trigger, callback) {
+    const self = this;
+    
+    // set listener
+    self.listen(trigger, callback);
+    
     function hashChange() {
-      self.speak(location.hash.substr(2));
+      self.speak(location.hash.substr(1));
     }
     if (trigger && location.hash.substr(2).length) hashChange();
     window.addEventListener("hashchange", hashChange, false);
   }
-  
-  // add a hall or room
-  add(type, res) {
-    res = Array.isArray(res) ? res : [res];
-    const retIds = [];
-    res.forEach(val => {
-      this[type][val.id] = val;
-      retIds.push(val.id);
-    });
-    return retIds;
+  open() {
+    for (var hall in this.halls) {
+      this.halls[hall].open();
+    }
+    this.setState("open");
+    return Promise.resolve();
   }
-  
-  // delete a hall or room
-  del(type, id) {
-    delete this[type][id];
-    return this[type];
+  close() {
+    for (var hall in this.halls) {
+      this.halls[hall].close();
+    }
+    this.setState("close");
+    return Promise.resolve();
   }
 }
 
 module.exports = Guide;
 
-},{"./base.js":4,"events":1}],6:[function(require,module,exports){
+},{"./base.js":3}],5:[function(require,module,exports){
 // GREAT HALL
 const Base = require("./base.js");
 
 class Hall extends Base {
-  constructor(opts) {
-    opts = opts || {};
-    opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
-    opts.rooms = opts.rooms || [];
-    opts.states = {
-      lock: `hall:${opts.id}:lock`,
-      open: `hall:${opts.id}:open`,
-      idle: `hall:${opts.id}:idle`,
-      close: `hall:${opts.id}:close`
-    };
+  constructor(opts={}) {
+    opts.rooms = opts.rooms || {};
     super(opts);
   }
   
   open() {
-    this.state.set("idle");
+    // when the hall opens we want to open all it's rooms.
+    for (var room in this.rooms) {
+      const _current = this.rooms[room];
+      _current.open();
+    }
+    this.setState("open");
     return Promise.resolve();
   }
   
   close() {
-    this.state.set("close");
+    for (var room in this.rooms) {
+      const _current = this.rooms[room];
+      _current.close();
+    }
+    this.setState("close");
     return Promise.resolve();
   }
-  
 }
-
 module.exports = Hall;
 
-},{"./base.js":4}],7:[function(require,module,exports){
+},{"./base.js":3}],6:[function(require,module,exports){
 /*
 room
 */
@@ -434,98 +450,55 @@ const Base = require("./base.js");
 const sel = require("./sel.js");
 
 class Room extends Base {
-  constructor(opts) {
-    opts = opts || {};
-
-    opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
-
+  constructor(opts={}) {
     opts.selector = opts.selector || "body";
-    opts.place = opts.place || "replace";
-
-    opts.halls = opts.halls || [];
-
+    opts.template = opts.template || "";
     opts.onOpen = opts.onOpen || false;
     opts.onBuild = opts.onBuild || false;
-
-    opts.isOpen = false;
-
-    opts.states = {
-      lock: `room:${opts.id}:lock`,
-      open: `room:${opts.id}:open`,
-      idle: `room:${opts.id}:idle`,
-      close: `room:${opts.id}:close`,
-      build: `room:${opts.id}:build`
-    };
-    
+    opts.states = ["lock", "open", "close", "build"]
     super(opts);
-
   }
   // INIT
   // init returns a promise resolve for .then use after init
   // this allows chaining of loading of multiple views in a page.
   open() {
-    if (this.isOpen) { return this.build(); }
-    this.isOpen = true;
+    if (this.state === "open") { return this.build(); }
     this.build()
       .then(() => {
         if (typeof this.onOpen == "function") {
           this.onOpen();
         }
       });
-    // if window.guide add this room to it on opeen
-    if (window.guide) {
-      window.guide.rooms[this.id] = this;
-    }
-    this.state.set("idle");
+    this.setState("open");
     return Promise.resolve();
   }
 
   close() {
-    const closeRoom = this.selector;
-    this.destroy().then(() => {
-      this.isOpen = false;
-      
-      console.log(`ROOM: ${closeRoom} has been closed`);
-    });
+    this.destroy();
+    this.setState("close");
+    return Promise.resolve();
   }
   // BUILD
-  
   // build element template and call it from the templates global variable
   // initialize any views contained in the view
   // returns a Promise
-  build(place) {
-    place = place || this.place;
-
+  build() {
     this.el = sel(this.selector);
 
     const $parent = this.el.parentNode || this.el;
-
-    // dom parser to transform template into html node
-    const tmp = document.createElement("DIV");
-    tmp.innerHTML = this.template;
-
-    const templ = tmp.children[0];
-    templ.dataset.id = this.id;
-
-    // check dom for element with data-id and if is already in dom set place property to inner
-    const $id = sel(`${this.selector}[data-id="${this.id}"]`);
-    place = $id ? "inner" : place;
-
-    switch (place) {
-    case "inner":
-      this.el.innerHTML = templ.innerHTML;
-      break;
-
-    default:
-      $parent.replaceChild(templ, this.el);
-      this.el = templ;
-    }
     
+    const tmp = document.createElement("DIV");
+    const self = this;
+    tmp.innerHTML = this.template;
+    for (var child of tmp.children) {
+      child.dataset.id = self.id;
+    }
+    this.el.innerHTML = tmp.innerHTML;
+
     // run any onBuild code set in the view
     if (typeof this.onBuild == "function") {
       this.onBuild();
     }
-        
     return Promise.resolve();
   }
 
@@ -534,16 +507,20 @@ class Room extends Base {
   // return promise
   destroy() {
     this.el.innerHTML = "";
-    return Promise.resolve();
   }
 }
-
 module.exports = Room;
 
-},{"./base.js":4,"./sel.js":8}],8:[function(require,module,exports){
+},{"./base.js":3,"./sel.js":7}],7:[function(require,module,exports){
 
 function Sel(selector) {
   return document.querySelector(selector);
+}
+
+Sel.dom = cb => {
+  document.addEventListener("DOMContentLoaded", function(event) {
+    cb.call(event);
+  });
 }
 
 Sel.all = selector => {
@@ -585,52 +562,5 @@ Sel.toggle = (el, _class) => {
 
 
 module.exports = Sel;
-
-},{}],9:[function(require,module,exports){
-/* State Machine */
-class State {
-  constructor(states) {
-    this._states = states || {};
-    this._states.lock = states.lock || "statelock:default";
-    this._current = "lock";
-  }
-  
-  setter(state) {
-    const _current = this._states[this._current] || false;
-    const _state = this._states[state] || false;
-
-    if (!_state) return;
-
-    if (state === this._current) {
-      return console.log(`You are already in state: ${state}`);
-    }
-
-    if (_current) {
-      guide.speak(`${_current}:leave`);
-    }
-
-    guide.speak(`${_state}:enter`);
-
-    this._current = state;
-
-    guide.speak(`${_state}`);
-    return Promise.resolve();
-  }
-  
-  get(state) {
-    return this._states[state];
-  }
-
-  current() {
-    return this._current;
-  }
-
-  add(state, msg) {
-    this._states[state] = msg;
-    return this._states[state];
-  }
-}
-
-module.exports = State;
 
 },{}]},{},[2]);

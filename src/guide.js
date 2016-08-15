@@ -1,58 +1,38 @@
-// Emitter: using node event emitter
-const Emitter = require("events").EventEmitter;
+// guide only handles guiding/routing traffic.
 const Base = require("./base.js");
 
 // GUIDE Class
 class Guide extends Base {
-  constructor(opts) {
+  constructor(opts={}) {
+    opts.halls = opts.halls || {};
     super(opts);
-    this.halls = {};
-    this.rooms = {};
-    this._emitter = new Emitter({});
   }
-  
-  speak(msg, res=false) {
-    this._emitter.emit(msg, res);
-    return Promise.resolve();
-  }
-  listen(msg, callback) {
-    this._emitter.on(msg, callback);
-    return Promise.resolve();
-  }
-  once(msg, callback) {
-    this._emitter.once(msg, callback);
-    return Promise.resolve();
-  }
-  remove(msg, callback) {
-    this._emitter.removeListener(msg, callback);
-    return Promise.resolve();
-  }
-  
   // process a route/hash change in the url
-  route(trigger) {
+  route(trigger, callback) {
     const self = this;
+    
+    // set listener
+    self.listen(trigger, callback);
+    
     function hashChange() {
-      self.speak(location.hash.substr(2));
+      self.speak(location.hash.substr(1));
     }
     if (trigger && location.hash.substr(2).length) hashChange();
     window.addEventListener("hashchange", hashChange, false);
   }
-  
-  // add a hall or room
-  add(type, res) {
-    res = Array.isArray(res) ? res : [res];
-    const retIds = [];
-    res.forEach(val => {
-      this[type][val.id] = val;
-      retIds.push(val.id);
-    });
-    return retIds;
+  open() {
+    for (var hall in this.halls) {
+      this.halls[hall].open();
+    }
+    this.setState("open");
+    return Promise.resolve();
   }
-  
-  // delete a hall or room
-  del(type, id) {
-    delete this[type][id];
-    return this[type];
+  close() {
+    for (var hall in this.halls) {
+      this.halls[hall].close();
+    }
+    this.setState("close");
+    return Promise.resolve();
   }
 }
 

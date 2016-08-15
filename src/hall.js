@@ -2,29 +2,28 @@
 const Base = require("./base.js");
 
 class Hall extends Base {
-  constructor(opts) {
-    opts = opts || {};
-    opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
-    opts.rooms = opts.rooms || [];
-    opts.states = {
-      lock: `hall:${opts.id}:lock`,
-      open: `hall:${opts.id}:open`,
-      idle: `hall:${opts.id}:idle`,
-      close: `hall:${opts.id}:close`
-    };
+  constructor(opts={}) {
+    opts.rooms = opts.rooms || {};
     super(opts);
   }
   
   open() {
-    this.state.set("idle");
+    // when the hall opens we want to open all it's rooms.
+    for (var room in this.rooms) {
+      const _current = this.rooms[room];
+      _current.open();
+    }
+    this.setState("open");
     return Promise.resolve();
   }
   
   close() {
-    this.state.set("close");
+    for (var room in this.rooms) {
+      const _current = this.rooms[room];
+      _current.close();
+    }
+    this.setState("close");
     return Promise.resolve();
   }
-  
 }
-
 module.exports = Hall;

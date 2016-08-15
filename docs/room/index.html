@@ -1,0 +1,52 @@
+<!doctype htl>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>amenti:Room</title>
+  <link rel="stylesheet" href="../lib/prism.css">
+  <link rel="stylesheet" href="../style/base.css">
+</head>
+<body>
+  <header></header>
+  <main></main>
+  <footer></footer>
+
+  <script src="../lib/prism.js"></script>
+  
+  <script src="../../dist/amenti.js"></script>
+  <script src="template.js"></script>
+  <script>
+
+    // first we are going to create a few rooms
+    var header = new amenti.Room({
+      selector: "header",
+      template: `
+        <h1 class="logo">amenti:Room</h1>
+        <nav>
+          <a href="../index.html">Home</a>
+          <a href="#">Rooms</a>
+          <a href="../hall_room/index.html">Hall &amp; Rooms</a>
+          <a href="../guide_hall_room/index.html">Guide, Hall &amp; Rooms</a>
+        </nav>
+      `
+    });
+        
+    var main = new amenti.Room({
+      selector: "main",
+      template: roomTemplate
+    });
+    
+    var footer = new amenti.Room({
+      selector: "footer",
+      template: `
+        <h3>Footer</h3>
+      `
+    });
+    
+    header.open();
+    main.open();
+    footer.open();
+    // now if you wanted todo more you could implement a state machine.  or use JQuery/Zepto for dom events.
+  </script>
+</body>
+</html>

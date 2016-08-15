@@ -1,45 +1,38 @@
 /* State Machine */
 class State {
-  constructor(states) {
-    this._states = states || {};
-    this._states.lock = states.lock || "statelock:default";
-    this._current = "lock";
+  constructor(states=[]) {
+    this._states = states;
+    this._current = this._states[0];
   }
   
-  setter(state) {
-    const _current = this._states[this._current] || false;
-    const _state = this._states[state] || false;
+  set(state) {
+    const _current = this._current || false;
+    const _state = this._states.includes(state);
+    const self = this;
 
-    if (!_state) return;
-
-    if (state === this._current) {
-      return console.log(`You are already in state: ${state}`);
-    }
+    if (!_state) throw new Error("The state you passed in was not a valid state.  Please use state.add('*state*').");
+    if (_state === this._current) throw new Error(`Currently in state: ${state}`);
 
     if (_current) {
-      guide.speak(`${_current}:leave`);
+      self.speak(`${_current}:leaving`).then(() => {
+        self.speak(`${state}:entering`).then(() => {
+          self._current = state;
+          self.speak(`${self._current}:entered`);
+        })
+      });
     }
-
-    guide.speak(`${_state}:enter`);
-
-    this._current = state;
-
-    guide.speak(`${_state}`);
     return Promise.resolve();
   }
   
-  get(state) {
-    return this._states[state];
-  }
-
-  current() {
+  get() {
     return this._current;
   }
 
-  add(state, msg) {
-    this._states[state] = msg;
-    return this._states[state];
+  add(state) {
+    this._states.push(state);
+    return promise.resolve();
   }
+
 }
 
 module.exports = State;
