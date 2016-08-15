@@ -3,12 +3,12 @@
   var header = new amenti.Room({
     selector: "header",
     template: `
-      <h1 class="logo">amenti:Guide, Hall &amp; Rooms</h1>
+      <h1 class="logo">amenti:Guide</h1>
       <nav>
         <a href="../index.html">Home</a>
-        <a href="#goto:room">Rooms</a>
-        <a href="#goto:hallRoom">Hall &amp; Rooms</a>
-        <a href="#goto:guideHallRoom">Guide, Hall &amp; Rooms</a>
+        <a href="#goto:room">Room</a>
+        <a href="#goto:hall">Hall</a>
+        <a href="#goto:guide">Guide</a>
       </nav>
     `
   });
@@ -36,23 +36,23 @@
   })
 
   // routes for when stuff happens
-  guide.route("goto:room", _goToRoom);
-  function _goToRoom() {
+  guide.route("goto:room", _goRoom);
+  function _goRoom() {
     main.template = roomTemplate;
     main.build();
     Prism.highlightElement(amenti.sel(".language-javascript"));
   }
 
-  guide.route("goto:hallRoom", _goToHallRoom);
-  function _goToHallRoom() {
-    main.template = hallRoomTemplate;
+  guide.route("goto:hall", _goHall);
+  function _goHall() {
+    main.template = hallTemplate;
     main.build();
     Prism.highlightElement(amenti.sel(".language-javascript"));
   }
 
-  guide.route("goto:guideHallRoom", _goToGuideHallRoom);
-  function _goToGuideHallRoom() {
-    main.template = guideHallRoomTemplate;
+  guide.route("goto:guide", _goGuide);
+  function _goGuide() {
+    main.template = guideTemplate;
     main.build();
     Prism.highlightElement(amenti.sel(".language-javascript"));
   }

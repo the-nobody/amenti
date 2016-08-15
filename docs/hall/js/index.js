@@ -2,12 +2,12 @@
 var header = new amenti.Room({
   selector: "header",
   template: `
-    <h1 class="logo">amenti:Hall &amp; Rooms</h1>
+    <h1 class="logo">amenti:Hall</h1>
     <nav>
       <a href="../index.html">Home</a>
-      <a href="../rooms/index.html">Rooms</a>
-      <a href="#">Hall &amp; Rooms</a>
-      <a href="../guide_hall_room/index.html">Guide, Hall &amp; Rooms</a>
+      <a href="../room/index.html">Room</a>
+      <a href="#">Hall</a>
+      <a href="../guide/index.html">Guide</a>
     </nav>
   `
 });

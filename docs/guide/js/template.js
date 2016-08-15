@@ -1,5 +1,5 @@
 var guideTemplate = `
-<h2>Guide, Hall &amp; Rooms</h2>
+<h2>Guide</h2>
 <p>Now let's use a guide todo some route/content changes.</p>
 
 <h3>Here are your Guide need to knows.</h3>

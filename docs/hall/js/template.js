@@ -1,5 +1,5 @@
 var hallTemplate = `
-<h2>Hall with Rooms</h2>
+<h2>Hall</h2>
 <p>As you can imagine a more complex user interface/application would be comprised of man rooms.  Well these rooms can be collected into halls and then the hall will open the rooms when it opens. This is to aid in room structure and just keeping things more together.</p>
 
 <h3>Here are your Hall need to knows.</h3>
