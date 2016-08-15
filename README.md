@@ -12,4 +12,4 @@ A hall is a container of rooms with states.  After a while many rooms get hard t
 ### Guide
 A guide is a container of halls with states.  This guide can open all it's halls and send messages back and forth. It can also set the state of any hall, or room that exists withing it.
 
-[_* see the docs for examples and reference to all the things._](docs/index.html)
+[_* see the docs for examples and reference to all the things._](http://www.amenti.io)
