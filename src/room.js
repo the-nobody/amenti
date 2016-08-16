@@ -46,6 +46,8 @@ class Room extends Base {
     const tmp = document.createElement("DIV");
     const self = this;
     tmp.innerHTML = this.template;
+    // assign a data-id to all the first level children
+    // so remove is simple
     for (var child of tmp.children) {
       child.dataset.id = self.id;
     }
@@ -62,7 +64,9 @@ class Room extends Base {
   // set html of view element to blank
   // return promise
   destroy() {
-    this.el.innerHTML = "";
+    sel.all(`[data-id="${this.id}"]`).forEach(ele => {
+      ele.remove();
+    });
   }
 }
 module.exports = Room;

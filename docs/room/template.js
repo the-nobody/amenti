@@ -55,13 +55,28 @@ A room is like a room in a house.  It holds all your stuff.
   <dt>room.addState("state")</dt>
   <dd>Add a state to the current this._states</dd>
 </dl>
-<h5>Example</h5>
+<h4>Examples</h4>
+<h5>Basic Room</h5>
 <pre><code class="language-javascript">var room = new amenti.Room({
-selector: "main", // this will put the template content inside a main tag.
-template: "My HTML string stuff can go here."
+  selector: "main", // this will put the template content inside a main tag.
+  template: "My HTML string stuff can go here."
 });
 
-// this will set the room into the open state and run the open method.
+// this will run the open method and set the room into the open state.
 room.open();
 </code></pre>
+<h5>Room in a Room</h5>
+<pre><code class="language-javascript">var roomerInner = new amenti.Room({
+  selector: ".inner",
+  template: "&lt;h2&gt;The inner room&lt;/h2&gt;"
+});
+
+var roomOuter = new amenti.Room({
+  selector: ".outer",
+  template: "&lt;h1&gt;The Outer Room&lt;/h1&gt;&lt;div class="inner"&gt;&lt;/div&gt;",
+  onOpen: function() {
+    roomerInner.open();
+  }
+});
+roomOuter.open();</code></pre>
 `;

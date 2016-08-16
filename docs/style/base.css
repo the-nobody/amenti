@@ -15,6 +15,9 @@ body, header, main, footer, p, a {
   font-family: "helvetica neue", Helvetica, Arial;
   font-weight: 100;
 }
+body, header, main, footer, a, img, ul, li, dt, dl, dd, h1, h2, h3, h4, h5, h6, p, span, div, nav {
+  box-sizing: border-box;
+}
 body {
   display: flex;
   flex-flow: column;
@@ -37,6 +40,7 @@ header {
   order: 1;
   font-size: var(--header-font-size);
   padding: var(--header-padding);
+  margin-bottom: 3rem;
 }
 header nav {
   display: flex;
@@ -72,6 +76,40 @@ footer {
   text-align: center;
   color: var(--color-awesomeBlue);
   font-weight: 100;
+  text-align: center;
+  position: relative;
+  margin-bottom: 5rem;
+  margin-top: 10rem;
+  font-size: 2rem;
+}
+.logo::before {
+  content: "";
+  background-image: url(../assets/logo.svg);
+  background-repeat: no-repeat;
+  background-size: 60% auto;
+  background-position: center;
+  background-color: rgba(0,0,0,.1);
+  display: inline-block;
+  height: 3rem;
+  width: 3rem;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  position: absolute;
+  top: -5rem;
+  left: calc(50% - 2.5rem);
+}
+.logo > span {
+  position: relative;
+  display: inline-block;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 2.5rem;
+  background-color: rgba(0,0,0,.1);
+  padding: 1.2rem;
+}
+.logo img {
+  width: auto;
+  height: auto;
 }
 
 h1, h2, h3 {
