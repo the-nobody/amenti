@@ -3,6 +3,9 @@
   "version": "1.1.9",
   "description": "Lightweight view rendering with state management.",
   "main": "index.js",
+  "engines" : {
+    "node" : ">=6.0" 
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/the-nobody/amenti.git"

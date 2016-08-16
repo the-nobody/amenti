@@ -1,6 +1,6 @@
 "use strict";
 // GREAT HALL
-var Base = require("./base.js");
+const Base = require("./base.js");
 
 class Hall extends Base {
   constructor(opts={}) {
@@ -11,7 +11,7 @@ class Hall extends Base {
   open() {
     // when the hall opens we want to open all it's rooms.
     for (var room in this.rooms) {
-      var _current = this.rooms[room];
+      const _current = this.rooms[room];
       _current.open();
     }
     this.setState("open");
@@ -20,7 +20,7 @@ class Hall extends Base {
   
   close() {
     for (var room in this.rooms) {
-      var _current = this.rooms[room];
+      const _current = this.rooms[room];
       _current.close();
     }
     this.setState("close");

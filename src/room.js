@@ -3,8 +3,8 @@
 room
 */
 
-var Base = require("./base.js");
-var sel = require("./sel.js");
+const Base = require("./base.js");
+const sel = require("./sel.js");
 
 class Room extends Base {
   constructor(opts={}) {
@@ -40,10 +40,10 @@ class Room extends Base {
   // initialize any views contained in the view
   // returns a Promise
   build() {
-    this.el = sel(this.selector);
+    this.el = sel.get(this.selector);
 
-    var tmp = document.createElement("DIV");
-    var self = this;
+    const tmp = document.createElement("DIV");
+    const self = this;
     tmp.innerHTML = this.template;
     // assign a data-id to all the first level children
     // so remove is simple
