@@ -1,16 +1,16 @@
 "use strict"
 // guide only handles guiding/routing traffic.
-const Base = require("./base.js");
+var Base = require("./base.js");
 
 // GUIDE Class
 class Guide extends Base {
-  constructor(opts={}) {
+  varructor(opts={}) {
     opts.halls = opts.halls || {};
     super(opts);
   }
   // process a route/hash change in the url
   route(trigger, callback) {
-    const self = this;
+    var self = this;
     
     // set listener
     self.listen(trigger, callback);

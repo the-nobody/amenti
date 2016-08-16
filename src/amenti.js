@@ -1,5 +1,5 @@
 // used to create a global window amenti for the browserify build
-const Amenti = {
+var Amenti = {
   Hall: require("./hall.js"),
   Guide: require("./guide.js"),
   Room: require("./room.js"),

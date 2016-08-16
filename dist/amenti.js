@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// used to create a global window amenti for the browserify build
-	const Amenti = {
+	var Amenti = {
 	  Hall: __webpack_require__(1),
 	  Guide: __webpack_require__(4),
 	  Room: __webpack_require__(5),
@@ -61,10 +61,10 @@
 
 	"use strict"
 	// GREAT HALL
-	const Base = __webpack_require__(2);
+	var Base = __webpack_require__(2);
 
 	class Hall extends Base {
-	  constructor(opts={}) {
+	  varructor(opts={}) {
 	    opts.rooms = opts.rooms || {};
 	    super(opts);
 	  }
@@ -72,7 +72,7 @@
 	  open() {
 	    // when the hall opens we want to open all it's rooms.
 	    for (var room in this.rooms) {
-	      const _current = this.rooms[room];
+	      var _current = this.rooms[room];
 	      _current.open();
 	    }
 	    this.setState("open");
@@ -81,7 +81,7 @@
 	  
 	  close() {
 	    for (var room in this.rooms) {
-	      const _current = this.rooms[room];
+	      var _current = this.rooms[room];
 	      _current.close();
 	    }
 	    this.setState("close");
@@ -95,11 +95,11 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const {EventEmitter} = __webpack_require__(3);
+	var {EventEmitter} = __webpack_require__(3);
 	// utility for setting this options in a class
 	// Builder
 	class Base {
-	  constructor(opts={}) {
+	  varructor(opts={}) {
 	    opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
 	    opts.states = opts.states || ["lock", "open", "close"];
 	    for (var opt in opts) {
@@ -126,9 +126,9 @@
 	  }
 	  
 	  setState(state) {
-	    const _current = this.state;
-	    const _state = this.states.includes(state);
-	    const self = this;
+	    var _current = this.state;
+	    var _state = this.states.includes(state);
+	    var self = this;
 	    
 	    if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
 	    if (state === _current) { throw new Error(`Currently in state: ${state}`); }
@@ -465,17 +465,17 @@
 
 	"use strict"
 	// guide only handles guiding/routing traffic.
-	const Base = __webpack_require__(2);
+	var Base = __webpack_require__(2);
 
 	// GUIDE Class
 	class Guide extends Base {
-	  constructor(opts={}) {
+	  varructor(opts={}) {
 	    opts.halls = opts.halls || {};
 	    super(opts);
 	  }
 	  // process a route/hash change in the url
 	  route(trigger, callback) {
-	    const self = this;
+	    var self = this;
 	    
 	    // set listener
 	    self.listen(trigger, callback);
@@ -514,11 +514,11 @@
 	room
 	*/
 
-	const Base = __webpack_require__(2);
-	const sel = __webpack_require__(6);
+	var Base = __webpack_require__(2);
+	var sel = __webpack_require__(6);
 
 	class Room extends Base {
-	  constructor(opts={}) {
+	  varructor(opts={}) {
 	    opts.selector = opts.selector || "body";
 	    opts.template = opts.template || "";
 	    opts.onOpen = opts.onOpen || false;
@@ -553,10 +553,10 @@
 	  build() {
 	    this.el = sel(this.selector);
 
-	    const $parent = this.el.parentNode || this.el;
+	    var $parent = this.el.parentNode || this.el;
 	    
-	    const tmp = document.createElement("DIV");
-	    const self = this;
+	    var tmp = document.createElement("DIV");
+	    var self = this;
 	    tmp.innerHTML = this.template;
 	    // assign a data-id to all the first level children
 	    // so remove is simple

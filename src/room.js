@@ -3,11 +3,11 @@
 room
 */
 
-const Base = require("./base.js");
-const sel = require("./sel.js");
+var Base = require("./base.js");
+var sel = require("./sel.js");
 
 class Room extends Base {
-  constructor(opts={}) {
+  varructor(opts={}) {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
     opts.onOpen = opts.onOpen || false;
@@ -42,10 +42,10 @@ class Room extends Base {
   build() {
     this.el = sel(this.selector);
 
-    const $parent = this.el.parentNode || this.el;
+    var $parent = this.el.parentNode || this.el;
     
-    const tmp = document.createElement("DIV");
-    const self = this;
+    var tmp = document.createElement("DIV");
+    var self = this;
     tmp.innerHTML = this.template;
     // assign a data-id to all the first level children
     // so remove is simple

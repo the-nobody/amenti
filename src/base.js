@@ -1,8 +1,8 @@
-const {EventEmitter} = require("events");
+var {EventEmitter} = require("events");
 // utility for setting this options in a class
 // Builder
 class Base {
-  constructor(opts={}) {
+  varructor(opts={}) {
     opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
     opts.states = opts.states || ["lock", "open", "close"];
     for (var opt in opts) {
@@ -29,9 +29,9 @@ class Base {
   }
   
   setState(state) {
-    const _current = this.state;
-    const _state = this.states.includes(state);
-    const self = this;
+    var _current = this.state;
+    var _state = this.states.includes(state);
+    var self = this;
     
     if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
     if (state === _current) { throw new Error(`Currently in state: ${state}`); }

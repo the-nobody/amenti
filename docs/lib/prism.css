@@ -65,7 +65,7 @@ pre[class*="language-"] {
 
 .token.property,
 .token.tag,
-.token.constant,
+.token.varant,
 .token.symbol,
 .token.deleted {
 	color: #f92672;
