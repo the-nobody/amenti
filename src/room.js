@@ -15,9 +15,7 @@ class Room extends Base {
     opts.states = ["lock", "open", "close", "build"];
     super(opts);
   }
-  // INIT
-  // init returns a promise resolve for .then use after init
-  // this allows chaining of loading of multiple views in a page.
+  // OPEN ROOM
   open() {
     if (this.state === "open") { return this.build(); }
     this.build()
@@ -29,27 +27,31 @@ class Room extends Base {
     this.setState("open");
     return Promise.resolve();
   }
-
+  
+  // CLOSE ROOM
   close() {
     this.destroy();
     this.setState("close");
     return Promise.resolve();
   }
 
-  // BUILD
+  // BUILD ROOM
   build() {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
+
     const tmp = document.createElement("DIV");
     tmp.innerHTML = this.template;
+
     this.el.innerHTML = tmp.innerHTML;
+
     if (typeof this.onBuild == "function") {
       this.onBuild();
     }
     return Promise.resolve();
   }
 
-  // REMOVE
+  // DESTROY ROOM
   destroy() {
     sel.get(this.selector).innerHTML = "";
   }
