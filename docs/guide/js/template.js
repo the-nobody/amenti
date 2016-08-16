@@ -5,6 +5,7 @@ var guideTemplate = `
 <h3>Here are your Guide need to knows.</h3>
 <p>A guide is like a guide in a big building.  You put all your halls into it, and then all those rooms are brought along with it.This really makes it so you can create some interconnection and send messages between different rooms.  You could fire a message that wouldtell one room to close and then send it's data to another room for processing.  Really the whole development process of amenti is very much like building a real world thing.  You then put it all together with a map so it all make sense.</p>
 
+<p>This page is also a little different than the others.  The Room, Hall, and Guide pages now change content based on a route rather than a url page.  To get back to the other pages just click Home.</p>
 <h4>Properties</h4>
 <dl>
   <dt>guide.id</dt>

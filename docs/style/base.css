@@ -86,17 +86,17 @@ footer {
   content: "";
   background-image: url(../assets/logo.svg);
   background-repeat: no-repeat;
-  background-size: 60% auto;
+  background-size: 50% auto;
   background-position: center;
   background-color: rgba(0,0,0,.1);
   display: inline-block;
-  height: 3rem;
-  width: 3rem;
+  height: 5rem;
+  width: 5rem;
   padding: 1rem;
-  border-radius: 1.5rem;
+  border-radius: 3.5rem;
   position: absolute;
-  top: -5rem;
-  left: calc(50% - 2.5rem);
+  top: -7rem;
+  left: calc(50% - 3.5rem);
 }
 .logo > span {
   position: relative;

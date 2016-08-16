@@ -357,7 +357,7 @@ class Base {
       self.speak(`${_current}:leaving`).then(() => {
         self.speak(`${state}:entering`).then(() => {
           self.state = state;
-          self.speak(`${self._current}:entered`);
+          self.speak(`${self.state}:entered`);
         });
       });
     }
