@@ -59,7 +59,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict"
+	"use strict";
 	// GREAT HALL
 	var Base = __webpack_require__(2);
 
@@ -138,7 +138,7 @@
 	        self.speak(`${state}:entering`).then(() => {
 	          self.state = state;
 	          self.speak(`${self._current}:entered`);
-	        })
+	        });
 	      });
 	    }
 	    return Promise.resolve();
@@ -463,7 +463,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict"
+	"use strict";
 	// guide only handles guiding/routing traffic.
 	var Base = __webpack_require__(2);
 
@@ -509,7 +509,7 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict"
+	"use strict";
 	/*
 	room
 	*/
@@ -523,7 +523,7 @@
 	    opts.template = opts.template || "";
 	    opts.onOpen = opts.onOpen || false;
 	    opts.onBuild = opts.onBuild || false;
-	    opts.states = ["lock", "open", "close", "build"]
+	    opts.states = ["lock", "open", "close", "build"];
 	    super(opts);
 	  }
 	  // INIT
@@ -553,8 +553,6 @@
 	  build() {
 	    this.el = sel(this.selector);
 
-	    var $parent = this.el.parentNode || this.el;
-	    
 	    var tmp = document.createElement("DIV");
 	    var self = this;
 	    tmp.innerHTML = this.template;
@@ -588,7 +586,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	"use strict"
+	"use strict";
 	function Sel(selector) {
 	  return document.querySelector(selector);
 	}
@@ -597,7 +595,7 @@
 	  document.addEventListener("DOMContentLoaded", function(event) {
 	    cb.call(event);
 	  });
-	}
+	};
 
 	Sel.all = selector => {
 	  return document.querySelectorAll(selector);
