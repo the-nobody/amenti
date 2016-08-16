@@ -1,4 +1,4 @@
-
+"use strict"
 function Sel(selector) {
   return document.querySelector(selector);
 }

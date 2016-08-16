@@ -1,3 +1,4 @@
+"use strict"
 // GREAT HALL
 const Base = require("./base.js");
 

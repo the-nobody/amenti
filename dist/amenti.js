@@ -59,6 +59,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict"
 	// GREAT HALL
 	const Base = __webpack_require__(2);
 
@@ -462,6 +463,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict"
 	// guide only handles guiding/routing traffic.
 	const Base = __webpack_require__(2);
 
@@ -507,6 +509,7 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict"
 	/*
 	room
 	*/
@@ -585,7 +588,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	
+	"use strict"
 	function Sel(selector) {
 	  return document.querySelector(selector);
 	}
