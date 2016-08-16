@@ -7,7 +7,7 @@ var Base = require("./base.js");
 var sel = require("./sel.js");
 
 class Room extends Base {
-  varructor(opts={}) {
+  constructor(opts={}) {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
     opts.onOpen = opts.onOpen || false;

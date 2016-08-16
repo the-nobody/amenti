@@ -4,7 +4,7 @@ var Base = require("./base.js");
 
 // GUIDE Class
 class Guide extends Base {
-  varructor(opts={}) {
+  constructor(opts={}) {
     opts.halls = opts.halls || {};
     super(opts);
   }

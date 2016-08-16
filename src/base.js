@@ -2,7 +2,7 @@ var {EventEmitter} = require("events");
 // utility for setting this options in a class
 // Builder
 class Base {
-  varructor(opts={}) {
+  constructor(opts={}) {
     opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
     opts.states = opts.states || ["lock", "open", "close"];
     for (var opt in opts) {

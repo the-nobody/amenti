@@ -3,7 +3,7 @@
 var Base = require("./base.js");
 
 class Hall extends Base {
-  varructor(opts={}) {
+  constructor(opts={}) {
     opts.rooms = opts.rooms || {};
     super(opts);
   }

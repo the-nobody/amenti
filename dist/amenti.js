@@ -64,7 +64,7 @@
 	var Base = __webpack_require__(2);
 
 	class Hall extends Base {
-	  varructor(opts={}) {
+	  constructor(opts={}) {
 	    opts.rooms = opts.rooms || {};
 	    super(opts);
 	  }
@@ -99,7 +99,7 @@
 	// utility for setting this options in a class
 	// Builder
 	class Base {
-	  varructor(opts={}) {
+	  constructor(opts={}) {
 	    opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
 	    opts.states = opts.states || ["lock", "open", "close"];
 	    for (var opt in opts) {
@@ -469,7 +469,7 @@
 
 	// GUIDE Class
 	class Guide extends Base {
-	  varructor(opts={}) {
+	  constructor(opts={}) {
 	    opts.halls = opts.halls || {};
 	    super(opts);
 	  }
@@ -518,7 +518,7 @@
 	var sel = __webpack_require__(6);
 
 	class Room extends Base {
-	  varructor(opts={}) {
+	  constructor(opts={}) {
 	    opts.selector = opts.selector || "body";
 	    opts.template = opts.template || "";
 	    opts.onOpen = opts.onOpen || false;
