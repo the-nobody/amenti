@@ -1,10 +1,10 @@
 {
   "name": "amenti",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Lightweight view rendering with state management.",
   "main": "index.js",
-  "engines" : {
-    "node" : ">=6.0" 
+  "engines": {
+    "node": ">=6.0"
   },
   "repository": {
     "type": "git",
