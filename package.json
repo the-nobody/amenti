@@ -1,7 +1,7 @@
 {
   "name": "amenti",
   "version": "1.1.8",
-  "description": "amenti javascript framework",
+  "description": "Lightweight view rendering with state management.",
   "main": "index.js",
   "repository": {
     "type": "git",
