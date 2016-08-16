@@ -44,7 +44,7 @@ tell one room to close and then send it's data to another room for processing.  
   <dt>guide.addState(state)</dt>
   <dd>Add a state to the guide.</dd>
 </dl>
-<h5>Examplee</h5>
+<h5>Example</h5>
 <pre><code class="language-javascript">var guide = new amenti.Guide({
   halls: {hall}  // the hall from the Hall &amp; Room example;
 })

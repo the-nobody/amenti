@@ -8,6 +8,7 @@ var header = new amenti.Room({
       <a href="../room/index.html">Room</a>
       <a href="#">Hall</a>
       <a href="../guide/index.html">Guide</a>
+      <a href="https://github.com/the-nobody/amenti" target="github">Github</a>
     </nav>
   `
 });
@@ -17,16 +18,9 @@ var main = new amenti.Room({
   template: hallTemplate
 });
 
-var footer = new amenti.Room({
-  selector: "footer",
-  template: `
-    <h3>Footer</h3>
-  `
-});
-
 // first let's create a guide to hold all the rooms and makes routes available
 var hall = new amenti.Hall({
-  rooms: {header,main,footer}
+  rooms: {header,main}
 });
 
 hall.open();

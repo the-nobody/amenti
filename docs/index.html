@@ -3,12 +3,13 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>amenti</title>
+  <link rel="stylesheet" href="lib/prism.css">
   <link rel="stylesheet" href="style/base.css">
 </head>
 <body>
   <main></main>
-  
+  <script src="lib/prism.js"></script>
   <script src="lib/amenti.min.js"></script>
   
   <script>
@@ -18,7 +19,16 @@
         <h1 class="logo">amenti</h1>
         <p>Amenti is a lightweight Javascript framework for structuring and providing state to otherwise stateless things.</p>
         <p>The framework is based on the principle of Guide, Hall, Room.  With this structure you can build pretty much infinite apps.</p>
-
+        
+        <h3>Installing</h3>
+        <p>amenti is an npm package which makes it super easy to install and use.</p>
+        <pre><code class="language-javascript">npm install amenti</code></pre>
+        
+        <p>After that you can require it in your modules, or include it from the dist dir in node_modules in a script tag.</p>
+        <pre><code class="language-javascript">// require style\nvar amenti = require("amenti");</code></pre><pre><code class="language-html">// script style\n&lt;script src="node_modules/amenti/dist/amenti.js"&gt;&lt;/script&gt; //15k\n&lt;script src="node_modules/amenti/dist/amenti.min.js"&gt;&lt;/script&gt; //10k</code></pre>
+        
+        <p>Now that you've got the how on install amenti.  Let's get to using it.</p>
+        
         <h3><a href="room/index.html">Room</a></h3>
         <p>A room is where all the html/dom/rendering magic happens.  Load a template from your favorite templating engine, or work directly with javascript template strings and build some really cool functions to wrap in.  The freedom is yours.</p>
         
@@ -26,7 +36,10 @@
         <p>A hall is a container of rooms with states.  After a while many rooms get hard to manage, and placing them in a container will make it seamless to interact with more spaces.</p>
 
         <h3><a href="guide/index.html">Guide</a></h3>
-        <p>A guide is a container of halls with states.  This guide can open all it's halls and send messages back and forth. It can also set the state of any hall, or room that exists withing it.</p>
+        <p>A guide is a container of halls with states.  This guide can open all it's halls and send messages back and forth. It can also set the state of any hall, or room that exists within it.</p>
+        
+        <h3><a href="https://github.com/the-nobody/amenti">Github</a>
+        
       `
     });
     main.open();

@@ -2,42 +2,46 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>amenti:Room</title>
-  <link rel="stylesheet" href="../lib/prism.css">
+  <title>amenti:Guide, Hall & Room</title>
   <link rel="stylesheet" href="../style/base.css">
 </head>
 <body>
   <header></header>
+  <nav></nav>
   <main></main>
   <footer></footer>
-
-  <script src="../lib/prism.js"></script>
-  <script src="../lib/amenti.min.js"></script>
-  <script src="template.js"></script>
+  
+  <script src="../../dist/amenti.min.js"></script>
+  
   <script>
 
     // first we are going to create a few rooms
     var header = new amenti.Room({
       selector: "header",
       template: `
-        <h1 class="logo">amenti:Room</h1>
-        <nav>
-          <a href="../index.html">Home</a>
-          <a href="#">Rooms</a>
-          <a href="../hall/index.html">Hall</a>
-          <a href="../guide/index.html">Guide</a>
-          <a href="https://github.com/the-nobody/amenti" target="github">Github</a>
-        </nav>
+        <h1 class="logo">amenti:Guide, Hall &amp; Room</h1>
       `
     });
-        
+    
     var main = new amenti.Room({
       selector: "main",
-      template: roomTemplate
+      template: `
+        <h2>Guide, Hall &amp; Room Page</h2>
+        <p>Description goes here.</p>
+      `
+    });
+    
+    var footer = new amenti.Room({
+      selector: "footer",
+      template: `
+        <h3>Footer</h3>
+      `
     });
     
     header.open();
     main.open();
+    footer.open();
+
     // now if you wanted todo more you could implement a state machine.  or use JQuery/Zepto for dom events.
   </script>
 </body>

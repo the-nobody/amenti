@@ -42,7 +42,7 @@ A hall is like a hall in a house.  It holds access points to rooms.
   <dt>hall.addState(state)</dt>
   <dd>Add a state to the hall.</dd>
 </dl>
-<h5>Examplee</h5>
+<h5>Example</h5>
 <pre><code class="language-javascript">var room1 = new amenti.Room({
   selector: "some selector",
   template: "some template"

@@ -55,7 +55,7 @@ A room is like a room in a house.  It holds all your stuff.
   <dt>room.addState("state")</dt>
   <dd>Add a state to the current this._states</dd>
 </dl>
-<h5>Examplee</h5>
+<h5>Example</h5>
 <pre><code class="language-javascript">var room = new amenti.Room({
 selector: "main", // this will put the template content inside a main tag.
 template: "My HTML string stuff can go here."
