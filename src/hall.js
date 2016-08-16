@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 // GREAT HALL
 var Base = require("./base.js");
 

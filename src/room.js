@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 /*
 room
 */
@@ -12,7 +12,7 @@ class Room extends Base {
     opts.template = opts.template || "";
     opts.onOpen = opts.onOpen || false;
     opts.onBuild = opts.onBuild || false;
-    opts.states = ["lock", "open", "close", "build"]
+    opts.states = ["lock", "open", "close", "build"];
     super(opts);
   }
   // INIT
@@ -42,8 +42,6 @@ class Room extends Base {
   build() {
     this.el = sel(this.selector);
 
-    var $parent = this.el.parentNode || this.el;
-    
     var tmp = document.createElement("DIV");
     var self = this;
     tmp.innerHTML = this.template;

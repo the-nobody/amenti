@@ -41,7 +41,7 @@ class Base {
         self.speak(`${state}:entering`).then(() => {
           self.state = state;
           self.speak(`${self._current}:entered`);
-        })
+        });
       });
     }
     return Promise.resolve();

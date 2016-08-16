@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 // guide only handles guiding/routing traffic.
 var Base = require("./base.js");
 

@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 function Sel(selector) {
   return document.querySelector(selector);
 }
@@ -7,7 +7,7 @@ Sel.dom = cb => {
   document.addEventListener("DOMContentLoaded", function(event) {
     cb.call(event);
   });
-}
+};
 
 Sel.all = selector => {
   return document.querySelectorAll(selector);
