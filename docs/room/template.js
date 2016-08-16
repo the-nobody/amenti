@@ -73,7 +73,7 @@ room.open();
 
 var roomOuter = new amenti.Room({
   selector: ".outer",
-  template: "&lt;h1&gt;The Outer Room&lt;/h1&gt;&lt;div class="inner"&gt;&lt;/div&gt;",
+  template: "&lt;h1&gt;The Outer Room&lt;/h1&gt;&lt;div class='inner'&gt;&lt;/div&gt;",
   onOpen: function() {
     roomerInner.open();
   }
