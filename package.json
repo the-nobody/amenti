@@ -1,6 +1,6 @@
 {
   "name": "amenti",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Lightweight view rendering with state management.",
   "main": "index.js",
   "engines": {
