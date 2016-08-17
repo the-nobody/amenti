@@ -16,7 +16,8 @@ class Guide extends Base {
     self.listen(trigger, callback);
     
     function hashChange() {
-      self.speak(location.hash.substr(1));
+      const _hash = location.hash.substr(1).split("|");
+      self.speak(_hash[0], _hash[1]);
     }
     if (trigger && location.hash.substr(2).length) hashChange();
     window.addEventListener("hashchange", hashChange, false);
