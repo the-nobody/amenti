@@ -38,9 +38,13 @@ class Room extends Base {
 
   // BUILD ROOM
   build(place="inner") {
+    // store previous state and set state to biuld
+    const stateBeforeBuid = this.state;
+    this.setState("build");
+
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
-
+        
     const tmp = document.createElement("DIV");
 
     switch (place) {
@@ -53,12 +57,14 @@ class Room extends Base {
       break;
       
     default:
-      tmp.innerHTML = this.template;        
+      tmp.innerHTML = this.template;
     }
 
     if (typeof this.onBuild == "function") {
       this.onBuild();
     }
+    // set the state back to what it was before build;
+    this.setState(stateBeforeBuid);
     return Promise.resolve();
   }
 
