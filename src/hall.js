@@ -12,7 +12,9 @@ class Hall extends Base {
     // when the hall opens we want to open all it's rooms.
     for (var room in this.rooms) {
       const _current = this.rooms[room];
-      _current.open();
+      if (_current.auto) {
+        _current.open();
+      }
     }
     this.setState("open");
     return Promise.resolve();
