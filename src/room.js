@@ -53,8 +53,7 @@ class Room extends Base {
       break;
       
     default:
-      tmp.innerHTML = this.template;
-        
+      tmp.innerHTML = this.template;        
     }
 
     if (typeof this.onBuild == "function") {

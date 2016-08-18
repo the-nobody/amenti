@@ -389,7 +389,8 @@ class Guide extends Base {
     self.listen(trigger, callback);
     
     function hashChange() {
-      self.speak(location.hash.substr(1));
+      const _hash = location.hash.substr(1).split("|");
+      self.speak(_hash[0], _hash[1]);
     }
     if (trigger && location.hash.substr(2).length) hashChange();
     window.addEventListener("hashchange", hashChange, false);
@@ -457,6 +458,7 @@ class Room extends Base {
   constructor(opts={}) {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
+    opts.auto = false;
     opts.onOpen = opts.onOpen || false;
     opts.onBuild = opts.onBuild || false;
     opts.states = ["lock", "open", "close", "build"];
@@ -483,14 +485,24 @@ class Room extends Base {
   }
 
   // BUILD ROOM
-  build() {
+  build(place="inner") {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
 
     const tmp = document.createElement("DIV");
-    tmp.innerHTML = this.template;
 
-    this.el.innerHTML = tmp.innerHTML;
+    switch (place) {
+    case "append":
+      this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
+      break;
+
+    case "prepend":
+      this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
+      break;
+      
+    default:
+      tmp.innerHTML = this.template;        
+    }
 
     if (typeof this.onBuild == "function") {
       this.onBuild();

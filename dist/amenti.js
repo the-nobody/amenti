@@ -458,6 +458,7 @@ class Room extends Base {
   constructor(opts={}) {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
+    opts.auto = false;
     opts.onOpen = opts.onOpen || false;
     opts.onBuild = opts.onBuild || false;
     opts.states = ["lock", "open", "close", "build"];
@@ -484,14 +485,24 @@ class Room extends Base {
   }
 
   // BUILD ROOM
-  build() {
+  build(place="inner") {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
 
     const tmp = document.createElement("DIV");
-    tmp.innerHTML = this.template;
 
-    this.el.innerHTML = tmp.innerHTML;
+    switch (place) {
+    case "append":
+      this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
+      break;
+
+    case "prepend":
+      this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
+      break;
+      
+    default:
+      tmp.innerHTML = this.template;        
+    }
 
     if (typeof this.onBuild == "function") {
       this.onBuild();
