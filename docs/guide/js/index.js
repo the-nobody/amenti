@@ -1,3 +1,4 @@
+/* global amenti, guideTemplate, roomTemplate, hallTemplate, Prism */
 (function() {
   // first we are going to create a few rooms
   var header = new amenti.Room({
@@ -27,7 +28,7 @@
   // now let's stor the hall in a guide and setup some routes to change the content.
   var guide = new amenti.Guide({
     halls: {mainHall}
-  })
+  });
 
   // routes for when stuff happens
   guide.route("goto:room", _goRoom);
@@ -53,4 +54,4 @@
   guide.open();
   // set the guide into the window
   window.guide = guide;
-})()
+})();

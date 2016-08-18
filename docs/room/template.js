@@ -15,6 +15,8 @@ A room is like a room in a house.  It holds all your stuff.
   <dd>room.el: is the element of the selector.</dd>
   <dt>room.template</dt>
   <dd>opts.template or body: The html template string for the room</dd>
+  <dt>room.autoOpen</dt>
+  <dd>opts.auto: true|false - automatically open the room if it is inside a hall.</dd>
   <dt>room.onOpen</dt>
   <dd>opts.onOpen: function to execute when the room opens.</dd>
   <dt>room.onBuild</dt>
