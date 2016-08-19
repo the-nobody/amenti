@@ -1,7 +1,4 @@
 "use strict";
-/*
-room
-*/
 
 const Base = require("./base.js");
 const sel = require("./sel.js");
@@ -10,7 +7,7 @@ class Room extends Base {
   constructor(opts={}) {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
-    opts.auto = false;
+    opts.auto = opts.auto || false;
     opts.onOpen = opts.onOpen || false;
     opts.onBuild = opts.onBuild || false;
     opts.states = ["lock", "open", "close", "build"];
@@ -19,15 +16,16 @@ class Room extends Base {
   // OPEN ROOM
   open() {
     if (this.state === "open") { return this.build(); }
-    this.build()
-      .then(() => {
-        if (typeof this.onOpen == "function") {
-          this.onOpen();
-        }
-      });
-    this.setState("open");
+    this.build().then(() => {
+      if (typeof this.onOpen == "function") {
+        this.onOpen();
+      }
+    }).then(() => {
+      this.setState("open");
+    });
     return Promise.resolve();
   }
+  
   
   // CLOSE ROOM
   close() {
@@ -38,33 +36,30 @@ class Room extends Base {
 
   // BUILD ROOM
   build(place="inner") {
-    // store previous state and set state to biuld
-    const stateBeforeBuid = this.state;
-    this.setState("build");
-
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
-        
-    const tmp = document.createElement("DIV");
-
-    switch (place) {
-    case "append":
-      this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
-      break;
-
-    case "prepend":
-      this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
-      break;
-      
-    default:
+    
+    this.setState("build").then(() => {
+      const tmp = document.createElement("DIV");
       tmp.innerHTML = this.template;
-    }
+      
+      switch (place) {
+      case "append":
+        this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
+        break;
 
-    if (typeof this.onBuild == "function") {
-      this.onBuild();
-    }
-    // set the state back to what it was before build;
-    this.setState(stateBeforeBuid);
+      case "prepend":
+        this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
+        break;
+        
+      default:
+        this.el.innerHTML = tmp.innerHTML;
+      }
+
+      if (typeof this.onBuild == "function") {
+        this.onBuild();
+      }
+    });
     return Promise.resolve();
   }
 

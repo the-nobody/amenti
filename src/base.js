@@ -30,21 +30,17 @@ class Base {
   }
   
   setState(state) {
-    var _current = this.state;
-    var _state = this.states.includes(state);
-    var self = this;
+    const _state = this.states.includes(state);
     
     if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
-    if (state === _current) { throw new Error(`Currently in state: ${state}`); }
-
-    if (_current) {
-      self.speak(`${_current}:leaving`).then(() => {
-        self.speak(`${state}:entering`).then(() => {
-          self.state = state;
-          self.speak(`${self.state}:entered`);
-        });
+    if (state === this.state) { throw new Error(`Currently in state: ${state}`); }
+    
+    this.speak(`${this.state}:leaving`).then(() => {
+      this.speak(`${state}:entering`).then(() => {
+        this.state = state;
+        this.speak(`${this.state}:entered`);
       });
-    }
+    });
     return Promise.resolve();
   }
   addState(state) {
