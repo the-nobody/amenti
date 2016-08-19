@@ -346,21 +346,17 @@ class Base {
   }
   
   setState(state) {
-    var _current = this.state;
-    var _state = this.states.includes(state);
-    var self = this;
+    const _state = this.states.includes(state);
     
     if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
-    if (state === _current) { throw new Error(`Currently in state: ${state}`); }
-
-    if (_current) {
-      self.speak(`${_current}:leaving`).then(() => {
-        self.speak(`${state}:entering`).then(() => {
-          self.state = state;
-          self.speak(`${self.state}:entered`);
-        });
+    if (state === this.state) { throw new Error(`Currently in state: ${state}`); }
+    
+    this.speak(`${this.state}:leaving`).then(() => {
+      this.speak(`${state}:entering`).then(() => {
+        this.state = state;
+        this.speak(`${this.state}:entered`);
       });
-    }
+    });
     return Promise.resolve();
   }
   addState(state) {
@@ -428,7 +424,9 @@ class Hall extends Base {
     // when the hall opens we want to open all it's rooms.
     for (var room in this.rooms) {
       const _current = this.rooms[room];
-      _current.open();
+      if (_current.auto) {
+        _current.open();
+      }
     }
     this.setState("open");
     return Promise.resolve();
@@ -447,9 +445,6 @@ module.exports = Hall;
 
 },{"./base.js":3}],6:[function(require,module,exports){
 "use strict";
-/*
-room
-*/
 
 const Base = require("./base.js");
 const sel = require("./sel.js");
@@ -458,7 +453,7 @@ class Room extends Base {
   constructor(opts={}) {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
-    opts.auto = false;
+    opts.auto = opts.auto || false;
     opts.onOpen = opts.onOpen || false;
     opts.onBuild = opts.onBuild || false;
     opts.states = ["lock", "open", "close", "build"];
@@ -467,15 +462,16 @@ class Room extends Base {
   // OPEN ROOM
   open() {
     if (this.state === "open") { return this.build(); }
-    this.build()
-      .then(() => {
-        if (typeof this.onOpen == "function") {
-          this.onOpen();
-        }
-      });
-    this.setState("open");
+    this.build().then(() => {
+      if (typeof this.onOpen == "function") {
+        this.onOpen();
+      }
+    }).then(() => {
+      this.setState("open");
+    });
     return Promise.resolve();
   }
+  
   
   // CLOSE ROOM
   close() {
@@ -488,25 +484,28 @@ class Room extends Base {
   build(place="inner") {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
-
-    const tmp = document.createElement("DIV");
-
-    switch (place) {
-    case "append":
-      this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
-      break;
-
-    case "prepend":
-      this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
-      break;
+    
+    this.setState("build").then(() => {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = this.template;
       
-    default:
-      tmp.innerHTML = this.template;        
-    }
+      switch (place) {
+      case "append":
+        this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
+        break;
 
-    if (typeof this.onBuild == "function") {
-      this.onBuild();
-    }
+      case "prepend":
+        this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
+        break;
+        
+      default:
+        this.el.innerHTML = tmp.innerHTML;
+      }
+
+      if (typeof this.onBuild == "function") {
+        this.onBuild();
+      }
+    });
     return Promise.resolve();
   }
 
