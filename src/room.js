@@ -15,14 +15,12 @@ class Room extends Base {
   }
   // OPEN ROOM
   open() {
-    if (this.state === "open") { return this.build(); }
     this.build().then(() => {
       if (typeof this.onOpen == "function") {
         this.onOpen();
       }
-    }).then(() => {
-      this.setState("open");
     });
+    this.setState("open");
     return Promise.resolve();
   }
   
@@ -31,6 +29,7 @@ class Room extends Base {
   close() {
     this.destroy();
     this.setState("close");
+    delete this.el.dataset.id;
     return Promise.resolve();
   }
 
@@ -39,27 +38,26 @@ class Room extends Base {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
     
-    this.setState("build").then(() => {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = this.template;
+    this.setState("build");
+
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = this.template;
+    switch (place) {
+    case "append":
+      this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
+      break;
+
+    case "prepend":
+      this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
+      break;
       
-      switch (place) {
-      case "append":
-        this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
-        break;
+    default:
+      this.el.innerHTML = tmp.innerHTML;
+    }
 
-      case "prepend":
-        this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
-        break;
-        
-      default:
-        this.el.innerHTML = tmp.innerHTML;
-      }
-
-      if (typeof this.onBuild == "function") {
-        this.onBuild();
-      }
-    });
+    if (typeof this.onBuild == "function") {
+      this.onBuild();
+    }
     return Promise.resolve();
   }
 

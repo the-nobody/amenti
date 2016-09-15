@@ -44,7 +44,10 @@ class Base {
     return Promise.resolve();
   }
   addState(state) {
-    this.states.push(state);
+    state = Array.isArray(state) ? state : [state];
+    state.forEach(st => {
+      this.states.push(st);
+    });
   }
 }
 
