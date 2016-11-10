@@ -18,7 +18,7 @@ class Guide extends Base {
     for (var hall in this.halls) {
       this.halls[hall].open();
     }
-    this.setState("open");
+    this.stateSet("open");
 
     
     return Promise.resolve();
@@ -27,7 +27,7 @@ class Guide extends Base {
     for (var hall in this.halls) {
       this.halls[hall].close();
     }
-    this.setState("close");
+    this.stateSet("close");
     return Promise.resolve();
   }
   

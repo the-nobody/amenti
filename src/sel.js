@@ -39,7 +39,7 @@ class Sel {
     return el.classList.contains(_class);
   }
   static toggle(el, _class) {
-    return el.classList.toggle(_class);    
+    return el.classList.toggle(_class);
   }
 }
 module.exports = Sel;

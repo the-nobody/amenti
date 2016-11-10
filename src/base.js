@@ -5,13 +5,32 @@ class Base {
   constructor(opts) {
     opts = opts || {};
     opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
-    opts.states = opts.states || ["lock", "open", "close"];
+    opts.states = opts.states || ["lock", "open", "close", "build", "loading", "ready"];
     for (var opt in opts) {
       this[opt] = opts[opt];
     }
     this._emitter = new EventEmitter({});
-    this.state = this.states[0];
+    this._state = this.states[0];
+    this.init();
   }
+  
+  init() {
+    this.listen("loading:entering", () => {
+      if (this.el) this.el.classList.add("loading");
+    });
+
+    this.listen("loading:leaving", () => {
+      if (this.el) this.el.classList.remove("loading");
+    });
+    
+    // init any listen events
+    if (this.hasOwnProperty("listeners")) {
+      for (var l in this.listeners) {
+        this.listen(l, this.listeners[l].bind(this));
+      }
+    }
+  }
+  
   speak(msg, resource=false) {
     this._emitter.emit(msg, resource);
     return Promise.resolve();
@@ -29,26 +48,28 @@ class Base {
     return Promise.resolve();
   }
   
-  setState(state) {
+  stateSet(state, resource=false) {
     const _state = this.states.includes(state);
     
     if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
-    if (state === this.state) { throw new Error(`Currently in state: ${state}`); }
+    if (state === this._state) { throw new Error(`Currently in state: ${state}`); }
     
-    this.speak(`${this.state}:leaving`).then(() => {
-      this.speak(`${state}:entering`).then(() => {
-        this.state = state;
-        this.speak(`${this.state}:entered`);
+    this.speak(`${this._state}:leaving`).then(() => {
+      this.speak(`${state}:entering`, resource).then(() => {
+        this._state = state;
+        this.speak(`${this._state}:entered`, resource);
       });
     });
     return Promise.resolve();
   }
-  addState(state) {
+  stateAdd(state) {
     state = Array.isArray(state) ? state : [state];
     state.forEach(st => {
       this.states.push(st);
     });
   }
+  
+  
 }
 
 module.exports = Base;
