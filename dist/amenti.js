@@ -1,4 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+"use strict";
+module.exports = {
+  Hall: require("./src/hall.js"),
+  Guide: require("./src/guide.js"),
+  Room: require("./src/room.js"),
+  sel: require("./src/sel.js"),
+};
+
+},{"./src/guide.js":4,"./src/hall.js":5,"./src/room.js":6,"./src/sel.js":7}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -302,18 +311,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],2:[function(require,module,exports){
-// used to create a global window amenti for the browserify build
-var Amenti = {
-  Hall: require("./hall.js"),
-  Guide: require("./guide.js"),
-  Room: require("./room.js"),
-  sel: require("./sel.js")
-};
-
-window.amenti = Amenti;
-
-},{"./guide.js":4,"./hall.js":5,"./room.js":6,"./sel.js":7}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var {EventEmitter} = require("events");
 // utility for setting this options in a class
 // Builder
@@ -321,13 +319,32 @@ class Base {
   constructor(opts) {
     opts = opts || {};
     opts.id = opts.id || Math.floor((1 + Math.random()) * 0x10000);
-    opts.states = opts.states || ["lock", "open", "close"];
+    opts.states = opts.states || ["lock", "open", "close", "build", "loading", "ready"];
     for (var opt in opts) {
       this[opt] = opts[opt];
     }
     this._emitter = new EventEmitter({});
-    this.state = this.states[0];
+    this._state = this.states[0];
+    this.init();
   }
+  
+  init() {
+    this.listen("loading:entering", () => {
+      if (this.el) this.el.classList.add("loading");
+    });
+
+    this.listen("loading:leaving", () => {
+      if (this.el) this.el.classList.remove("loading");
+    });
+    
+    // init any listen events
+    if (this.hasOwnProperty("listeners")) {
+      for (var l in this.listeners) {
+        this.listen(l, this.listeners[l].bind(this));
+      }
+    }
+  }
+  
   speak(msg, resource=false) {
     this._emitter.emit(msg, resource);
     return Promise.resolve();
@@ -345,28 +362,33 @@ class Base {
     return Promise.resolve();
   }
   
-  setState(state) {
+  stateSet(state, resource=false) {
     const _state = this.states.includes(state);
     
     if (!_state) { throw new Error("The state you passed in was not a valid state.  Please use addState('*state*')."); }
-    if (state === this.state) { throw new Error(`Currently in state: ${state}`); }
+    if (state === this._state) { throw new Error(`Currently in state: ${state}`); }
     
-    this.speak(`${this.state}:leaving`).then(() => {
-      this.speak(`${state}:entering`).then(() => {
-        this.state = state;
-        this.speak(`${this.state}:entered`);
+    this.speak(`${this._state}:leaving`).then(() => {
+      this.speak(`${state}:entering`, resource).then(() => {
+        this._state = state;
+        this.speak(`${this._state}:entered`, resource);
       });
     });
     return Promise.resolve();
   }
-  addState(state) {
-    this.states.push(state);
+  stateAdd(state) {
+    state = Array.isArray(state) ? state : [state];
+    state.forEach(st => {
+      this.states.push(st);
+    });
   }
+  
+  
 }
 
 module.exports = Base;
 
-},{"events":1}],4:[function(require,module,exports){
+},{"events":2}],4:[function(require,module,exports){
 "use strict";
 // guide only handles guiding/routing traffic.
 const Base = require("./base.js");
@@ -374,36 +396,44 @@ const Base = require("./base.js");
 // GUIDE Class
 class Guide extends Base {
   constructor(opts={}) {
-    opts.halls = opts.halls || {};
+    opts.halls = {};
+    opts.rooms = {};
     super(opts);
   }
   // process a route/hash change in the url
   route(trigger, callback) {
-    const self = this;
-    
-    // set listener
-    self.listen(trigger, callback);
-    
-    function hashChange() {
-      const _hash = location.hash.substr(1).split("|");
-      self.speak(_hash[0], _hash[1]);
-    }
-    if (trigger && location.hash.substr(2).length) hashChange();
-    window.addEventListener("hashchange", hashChange, false);
+    this.listen(trigger, callback);
   }
+
   open() {
     for (var hall in this.halls) {
       this.halls[hall].open();
     }
-    this.setState("open");
+    this.stateSet("open");
+
+    
     return Promise.resolve();
   }
   close() {
     for (var hall in this.halls) {
       this.halls[hall].close();
     }
-    this.setState("close");
+    this.stateSet("close");
     return Promise.resolve();
+  }
+  
+  addHalls(halls) {
+    for (var hall in halls) {
+      const _current = halls[hall];
+      this.halls[_current.id] = _current;
+    }
+  }
+  
+  addRooms(rooms) {
+    for (var room in rooms) {
+      const _current = rooms[room];
+      this.rooms[_current.id] = _current;
+    }
   }
 }
 
@@ -422,13 +452,7 @@ class Hall extends Base {
   
   open() {
     // when the hall opens we want to open all it's rooms.
-    for (var room in this.rooms) {
-      const _current = this.rooms[room];
-      if (_current.auto) {
-        _current.open();
-      }
-    }
-    this.setState("open");
+    this.stateSet("open");
     return Promise.resolve();
   }
   
@@ -437,7 +461,7 @@ class Hall extends Base {
       const _current = this.rooms[room];
       _current.close();
     }
-    this.setState("close");
+    this.stateSet("close");
     return Promise.resolve();
   }
 }
@@ -454,58 +478,51 @@ class Room extends Base {
     opts.selector = opts.selector || "body";
     opts.template = opts.template || "";
     opts.auto = opts.auto || false;
-    opts.onOpen = opts.onOpen || false;
-    opts.onBuild = opts.onBuild || false;
-    opts.states = ["lock", "open", "close", "build"];
     super(opts);
+    
+    if (this.auto) {
+      setTimeout(() => {
+        this.open();
+      }, 10);
+    }
   }
   // OPEN ROOM
   open() {
-    if (this.state === "open") { return this.build(); }
     this.build().then(() => {
-      if (typeof this.onOpen == "function") {
-        this.onOpen();
-      }
-    }).then(() => {
-      this.setState("open");
+      this.stateSet("open");
     });
     return Promise.resolve();
   }
-  
   
   // CLOSE ROOM
   close() {
     this.destroy();
-    this.setState("close");
+    this.stateSet("close");
+    delete this.el.dataset.id;
     return Promise.resolve();
   }
-
+  
   // BUILD ROOM
   build(place="inner") {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
-    
-    this.setState("build").then(() => {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = this.template;
+
+    this.stateSet("build");
+
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = this.template;
+    switch (place) {
+    case "append":
+      this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
+      break;
+
+    case "prepend":
+      this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
+      break;
       
-      switch (place) {
-      case "append":
-        this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
-        break;
-
-      case "prepend":
-        this.el.insertAdjacentHTML("afterbegin", tmp.innerHTML);
-        break;
-        
-      default:
-        this.el.innerHTML = tmp.innerHTML;
-      }
-
-      if (typeof this.onBuild == "function") {
-        this.onBuild();
-      }
-    });
+    default:
+      this.el.innerHTML = tmp.innerHTML;
+    }
     return Promise.resolve();
   }
 
@@ -559,9 +576,8 @@ class Sel {
   }
   static toggle(el, _class) {
     return el.classList.toggle(_class);
-    
   }
 }
 module.exports = Sel;
 
-},{}]},{},[2]);
+},{}]},{},[1]);

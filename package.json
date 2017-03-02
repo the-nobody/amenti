@@ -3,6 +3,10 @@
   "version": "1.3.0",
   "description": "Lightweight view rendering with state management.",
   "main": "index.js",
+  "scripts": {
+    "dist": "browserify index.js -o dist/amenti.js",
+    "min": "uglifyjs dist/amenti.js -c -m -o dist/amenti.min.js"
+  },
   "engines": {
     "node": ">=6.0"
   },
