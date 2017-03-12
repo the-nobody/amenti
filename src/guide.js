@@ -9,6 +9,7 @@ class Guide extends Base {
     opts.rooms = {};
     super(opts);
   }
+  
   // process a route/hash change in the url
   route(trigger, callback) {
     this.listen(trigger, callback);

@@ -1,3 +1,11 @@
+// AMENTI ROOM
+// OPTIONS:
+//   selector
+//   template
+//   auto
+//
+//   if auto is truen then room will run the open function after 10 milisec.
+
 "use strict";
 
 const Base = require("./base.js");
@@ -33,14 +41,14 @@ class Room extends Base {
   }
   
   // BUILD ROOM
-  build(place="inner") {
+  build(place="inner", template) {
     this.el = sel.get(this.selector);
     this.el.dataset.id = this.id;
 
     this.stateSet("build");
 
     const tmp = document.createElement("DIV");
-    tmp.innerHTML = this.template;
+    tmp.innerHTML = template || this.template;
     switch (place) {
     case "append":
       this.el.insertAdjacentHTML("beforeend", tmp.innerHTML);
